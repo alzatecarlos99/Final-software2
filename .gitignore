@@ -1,0 +1,7 @@
+# Ignora archivos de configuración con claves
+client_secret.json
+token.json
+
+# Ignora directorios y archivos de configuración de IDE
+.idea/
+__pycache__/

@@ -1,0 +1,14 @@
+default_stages: [ commit, manual ]
+
+repos:
+  - repo: https://github.com/ambv/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        args: ["--ignore=E501,E266,F811, W503"]
