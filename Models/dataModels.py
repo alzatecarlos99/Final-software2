@@ -40,4 +40,3 @@ class ChatStatus(str, enum.Enum):
 class Chat(Entity):
     messages: List[Message] = pydantic.Field(default_factory=list)
     status: ChatStatus = ChatStatus.status1
-

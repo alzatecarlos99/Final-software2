@@ -48,7 +48,7 @@ class GoogleCalendarManager:
         time_max: Optional[str] = None,  # 2021-12-01T00:00:00Z
     ):
         token = self._token["token"]
-        url = f"https://www.googleapis.com/calendar/v3/calendars/primary/events"
+        url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
         headers = {"Authorization": f"Bearer {token}"}
         time_min = time_min or dt.datetime.utcnow().isoformat() + "Z"
         time_max = (
@@ -86,7 +86,7 @@ class GoogleCalendarManager:
         self, time_min: Optional[str] = None, time_max: Optional[str] = None
     ):
         token = self._token["token"]
-        url = f"https://www.googleapis.com/calendar/v3/freeBusy"
+        url = "https://www.googleapis.com/calendar/v3/freeBusy"
         headers = {"Authorization": f"Bearer {token}"}
         time_min = (
             time_min or dt.datetime.now(pytz.timezone("America/Bogota")).isoformat()
@@ -116,15 +116,16 @@ class GoogleCalendarManager:
         else:
             print(f"Error: {response.status_code} - {response.text}")
             return None
+
     def add_event(
-            self,
-            summary: str,
-            start_time: str,
-            end_time: str,
-            description: Optional[str] = None,
+        self,
+        summary: str,
+        start_time: str,
+        end_time: str,
+        description: Optional[str] = None,
     ):
         token = self._token["token"]
-        url = f"https://www.googleapis.com/calendar/v3/calendars/primary/events"
+        url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
         headers = {"Authorization": f"Bearer {token}"}
 
         event_body = {
@@ -142,8 +143,3 @@ class GoogleCalendarManager:
             print("Event added successfully.")
         else:
             print(f"Error: {response.status_code} - {response.text}")
-
-
-
-
-
