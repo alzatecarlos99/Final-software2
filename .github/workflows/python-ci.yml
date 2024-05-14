@@ -6,8 +6,11 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10, 3.11]  # Ejecutar el CI en múltiples versiones de Python
 
     steps:
     - uses: actions/checkout@v2
@@ -15,13 +18,25 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.11.8'
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache Poetry virtual environment
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pypoetry
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install poetry
+        pip install poetry==1.1.13
         poetry install
+        if [ $? -ne 0 ]; then
+          echo "Error installing dependencies"
+          exit 1
+        fi
 
     - name: Run test
       run: |
@@ -30,7 +45,7 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
-          flags: smart-tests
-          verbose: true
+        flags: smart-tests
+        verbose: true
       env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
