@@ -5,3 +5,6 @@ token.json
 # Ignora directorios y archivos de configuración de IDE
 .idea/
 __pycache__/
+
+__pycache__/
+*.pyc
