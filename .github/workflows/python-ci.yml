@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install poetry==1.1.13
+        pip install poetry
         poetry install
         if [ $? -ne 0 ]; then
           echo "Error installing dependencies"
