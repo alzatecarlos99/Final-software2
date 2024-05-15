@@ -87,7 +87,10 @@ class TestMongoConnection(unittest.TestCase):
         mock_client_instance = MagicMock()
         mock_client_instance.server_info.return_value = True
         mock_mongo_client.return_value = mock_client_instance
-        assert "Conexión a mongo exitosa"
+        self.assertTrue(
+            mock_client_instance.server_info.called,
+            "La conexión a MongoDB no fue exitosa como se esperaba",
+        )
 
     def test_mongo_Connection_timeout_error(self, mock_mongo_client):
         mock_client_instance = MagicMock()
