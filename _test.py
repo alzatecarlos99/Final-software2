@@ -10,7 +10,7 @@ import unittest
 import pytest
 
 
-# pruebas unitarias
+# Unit tests
 def test_send_patient_info():
     tool = SendPatientInfo()
     response = tool._run(
@@ -35,7 +35,7 @@ def test_create_calendar_event():
     ), "El evento no se creó correctamente"
 
 
-# Pruebas de integración para GoogleCalendarManager
+# Integration tests for GoogleCalendarManager
 @pytest.mark.skip_calendar(reason="Falta el archivo client_secret.json")
 @pytest.fixture
 def calendar_manager():
@@ -43,7 +43,6 @@ def calendar_manager():
 
 
 def test_add_and_retrieve_event(calendar_manager):
-    # Asegurarse de usar un entorno y credenciales seguros y de prueba
     start_time = (
         datetime.datetime.utcnow() + datetime.timedelta(days=1)
     ).isoformat() + "Z"
@@ -64,7 +63,6 @@ def test_authentication_and_fetch_events(calendar_manager):
 
 @patch("requests.get")
 def test_get_upcoming_events(mock_get):
-    # Configuración del mock
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {
         "items": [
@@ -88,7 +86,7 @@ class TestMongoConnection(unittest.TestCase):
         mock_client_instance = MagicMock()
         mock_client_instance.server_info.return_value = True
         mock_mongo_client.return_value = mock_client_instance
-        assert "Conexión a mongo exitosa"
+        self.assertTrue(mock_client_instance.server_info(), "Conexión a mongo exitosa")
 
     def test_mongo_Connection_timeout_error(self, mock_mongo_client):
         mock_client_instance = MagicMock()
@@ -96,7 +94,8 @@ class TestMongoConnection(unittest.TestCase):
             "Tiempo excedido"
         )
         mock_mongo_client.return_value = mock_client_instance
-        assert "Tiempo excedido"
+        with self.assertRaises(ServerSelectionTimeoutError):
+            _ = mock_client_instance.server_info()
 
     def test_mongo_Connection_failure(self, mock_mongo_client):
         mock_client_instance = MagicMock()
@@ -104,4 +103,5 @@ class TestMongoConnection(unittest.TestCase):
             "Fallo al conectarse a mongodb"
         )
         mock_mongo_client.return_value = mock_client_instance
-        assert "Fallo al conectarse a mongodb"
+        with self.assertRaises(ConnectionFailure):
+            _ = mock_client_instance.server_info()
