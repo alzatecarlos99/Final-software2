@@ -111,9 +111,12 @@ class SendPatientInfo(langchain_core_tools.BaseTool):
             )
 
         except pymongo.errors.ServerSelectionTimeoutError as errorTiempo:
-            print("Tiempo excedido " + errorTiempo)
+
+            print("Tiempo excedido " + str(errorTiempo))
+
         except pymongo.errors.ConnectionFailure as errorConexion:
-            print("Fallo al conectarse a mongodb " + errorConexion)
+
+            print("Fallo al conectarse a mongodb " + str(errorConexion))
 
         finally:
             cliente.close()
