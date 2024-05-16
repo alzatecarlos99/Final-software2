@@ -9,9 +9,8 @@ from pymongo.errors import ServerSelectionTimeoutError, ConnectionFailure
 import unittest
 import pytest
 
+
 # pruebas unitarias
-
-
 def test_send_patient_info():
     tool = SendPatientInfo()
     response = tool._run(
