@@ -25,7 +25,7 @@ def test_send_patient_info():
     ), "El mensaje de respuesta no es el esperado"
 
 
-@pytest.mark.skip_calendar(reason="Falta el archivo client_secret.json")
+@pytest.mark.skip(reason="Falta el archivo client_secret.json")
 def test_create_calendar_event():
     tool = CreateCalendarEvent()
     test_date = "24-04-2024 09:00 AM"
@@ -36,12 +36,13 @@ def test_create_calendar_event():
 
 
 # Integration tests for GoogleCalendarManager
-@pytest.mark.skip_calendar(reason="Falta el archivo client_secret.json")
+@pytest.mark.skip(reason="Falta el archivo client_secret.json")
 @pytest.fixture
 def calendar_manager():
     return GoogleCalendarManager()
 
 
+@pytest.mark.skip(reason="Falta el archivo client_secret.json")
 def test_add_and_retrieve_event(calendar_manager):
     start_time = (
         datetime.datetime.utcnow() + datetime.timedelta(days=1)
@@ -56,11 +57,13 @@ def test_add_and_retrieve_event(calendar_manager):
     ), "Event added should be in the upcoming events"
 
 
+@pytest.mark.skip(reason="Falta el archivo client_secret.json")
 def test_authentication_and_fetch_events(calendar_manager):
     events = calendar_manager.get_upcoming_events()
     assert events is not None, "Should fetch events after authenticating"
 
 
+@pytest.mark.skip(reason="Falta el archivo client_secret.json")
 @patch("requests.get")
 def test_get_upcoming_events(mock_get):
     mock_get.return_value.status_code = 200
