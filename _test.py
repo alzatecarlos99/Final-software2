@@ -14,16 +14,19 @@ import os
 # Pruebas unitarias
 def test_send_patient_info():
     tool = SendPatientInfo()
-    response = tool._run(
-        name="John Doe",
-        age=30,
-        motive="Consulta de rutina",
-        city="Ciudad Prueba",
-        details="Detalles adicionales aquí",
-    )
-    assert (
-        response == "Vale, regálame un momento"
-    ), "El mensaje de respuesta no es el esperado"
+    try:
+        response = tool._run(
+            name="John Doe",
+            age=30,
+            motive="Consulta de rutina",
+            city="Ciudad Prueba",
+            details="Detalles adicionales aquí",
+        )
+        assert (
+            response == "Vale, regálame un momento"
+        ), "El mensaje de respuesta no es el esperado"
+    except ServerSelectionTimeoutError as e:
+        assert False, "Failed due to timeout: " + str(e)
 
 
 # Condición para verificar si el archivo client_secret.json existe
