@@ -29,7 +29,7 @@ def test_send_patient_info():
         assert False, "Failed due to timeout: " + str(e)
 
 
-# Condición para verificar si el archivo client_secret.json existe
+# Verificar si el archivo client_secret.json existe en el directorio actual
 client_secret_exists = os.path.isfile("client_secret.json")
 
 
