@@ -26,6 +26,7 @@ def test_send_patient_info():
     ), "El mensaje de respuesta no es el esperado"
 
 
+@pytest.mark.skip_calendar(reason="Falta el archivo client_secret.json")
 def test_create_calendar_event():
     tool = CreateCalendarEvent()
     test_date = "24-04-2024 09:00 AM"
@@ -36,6 +37,7 @@ def test_create_calendar_event():
 
 
 # Pruebas de integración para GoogleCalendarManager
+@pytest.mark.skip_calendar(reason="Falta el archivo client_secret.json")
 @pytest.fixture
 def calendar_manager():
     return GoogleCalendarManager()
