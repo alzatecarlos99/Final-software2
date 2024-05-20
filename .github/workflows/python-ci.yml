@@ -33,7 +33,6 @@ jobs:
           echo "Error installing dependencies"
           exit 1
         fi
-        
 
     - name: Run test
       run: |
@@ -45,4 +44,4 @@ jobs:
         flags: smart-tests
         verbose: true
       env:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
