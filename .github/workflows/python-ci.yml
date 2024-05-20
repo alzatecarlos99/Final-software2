@@ -7,8 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
@@ -35,6 +33,7 @@ jobs:
           echo "Error installing dependencies"
           exit 1
         fi
+        
 
     - name: Run test
       run: |
@@ -45,4 +44,5 @@ jobs:
       with:
         flags: smart-tests
         verbose: true
+      env:
         token: ${{ secrets.CODECOV_TOKEN }}
