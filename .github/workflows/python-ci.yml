@@ -44,5 +44,4 @@ jobs:
       with:
         flags: smart-tests
         verbose: true
-      env:
         token: ${{ secrets.CODECOV_TOKEN }}
