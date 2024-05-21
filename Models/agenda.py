@@ -1,53 +1,58 @@
 import datetime as dt
-import json
 import os.path
 from pprint import pprint
-from typing import Dict, Optional
+from typing import Optional
 import pytz
 import requests
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-
+from google.auth.exceptions import RefreshError  # Importar RefreshError
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
 class GoogleCalendarManager:
     def __init__(self):
-        self._token = self._authenticate()
+        self._token_file = "../token.json"
+        self._creds = self._authenticate()
 
-    @staticmethod
-    def _authenticate() -> Dict:
+    def _authenticate(self) -> Credentials:
         creds = None
 
-        if os.path.exists("../token.json"):
-            creds = Credentials.from_authorized_user_file("../token.json", SCOPES)
+        if os.path.exists(self._token_file):
+            creds = Credentials.from_authorized_user_file(self._token_file, SCOPES)
 
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
+                try:
+                    creds.refresh(Request())
+                except RefreshError:  # Utilizar la excepción importada
+                    print("El token ha expirado o ha sido revocado. Reautenticando...")
+                    creds = self._reauthenticate()
             else:
-                print(os.getcwd())
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    "client_secret.json", SCOPES
-                )
-                creds = flow.run_local_server(port=0)
+                creds = self._reauthenticate()
 
-            # Save the credentials for the next run
-            with open("../token.json", "w") as token:
-                token.write(creds.to_json())
+        # Guardar las credenciales para la próxima ejecución
+        with open(self._token_file, "w") as token:
+            token.write(creds.to_json())
 
-        # return build("calendar", "v3", credentials=creds)
-        return json.loads(creds.to_json())
+        return creds
+
+    def _reauthenticate(self) -> Credentials:
+        flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
+        creds = flow.run_local_server(port=0)
+        with open(self._token_file, "w") as token:
+            token.write(creds.to_json())
+        return creds
 
     def get_upcoming_events(
         self,
         max_results: int = 10,
-        time_min: Optional[str] = None,  # 2021-12-01T00:00:00Z
-        time_max: Optional[str] = None,  # 2021-12-01T00:00:00Z
+        time_min: Optional[str] = None,
+        time_max: Optional[str] = None,
     ):
-        token = self._token["token"]
+        token = self._creds.token
         url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
         headers = {"Authorization": f"Bearer {token}"}
         time_min = time_min or dt.datetime.utcnow().isoformat() + "Z"
@@ -68,7 +73,6 @@ class GoogleCalendarManager:
                 "timeMax": time_max,
             },
         )
-        pprint(response.json())
         if response.status_code == 200:
             events = response.json().get("items", [])
             if not events:
@@ -85,7 +89,7 @@ class GoogleCalendarManager:
     def get_free_busy_agenda(
         self, time_min: Optional[str] = None, time_max: Optional[str] = None
     ):
-        token = self._token["token"]
+        token = self._creds.token
         url = "https://www.googleapis.com/calendar/v3/freeBusy"
         headers = {"Authorization": f"Bearer {token}"}
         time_min = (
@@ -109,7 +113,6 @@ class GoogleCalendarManager:
                 "items": [{"id": "primary"}],
             },
         )
-        # pprint(response.json())
         if response.status_code == 200:
             pprint(response.json())
             return response.json()
@@ -124,7 +127,7 @@ class GoogleCalendarManager:
         end_time: str,
         description: Optional[str] = None,
     ):
-        token = self._token["token"]
+        token = self._creds.token
         url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
         headers = {"Authorization": f"Bearer {token}"}
 
