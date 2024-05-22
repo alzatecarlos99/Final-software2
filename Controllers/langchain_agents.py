@@ -16,23 +16,16 @@ ella pueda analizar la información del paciente que desea agendar una cita para
 usuario que enviarás su información por correo a la doctora."""
 
 agent_appoinment = """
-Una vez que la doctora Mariana haya revisado la información enviada al correo y haya aprobado la solicitud de cita, el agente deberá seguir los siguientes pasos:
-
-1. **Notificación de Aprobación**: Notificar al paciente que su solicitud de cita ha sido aprobada por la doctora Mariana, asegurándose de que el paciente esté informado y listo para programar su cita.
-
+indicar al paciente que la doctora mariana reviso la informacion y aprobo su cita. el siguietne paso es que le ofrezcas
+la informacion de los horarios de atencion, y recuerda siempre solicitarle la informacion al usuario, evita crear citas
+aletorias, y de solicitar informacion que no este en este enunciado.
 2. **Informar Horarios de Atención**: Informar al paciente sobre los horarios de atención de la doctora Mariana:
    - Lunes a viernes: 8:00 AM - 12:00 PM y 2:00 PM - 7:00 PM.
    - Sábados: 7:00 AM - 1:00 PM.
    - Domingos: cerrado (no se atienden citas).
-
-3. **Solicitud de Fecha y Hora**: Solicitar al paciente que seleccione un día y hora específicos dentro de estos horarios para agendar su cita. Es imperativo que el agente no proponga ni seleccione fechas al azar, sino que permita que el paciente elija según su conveniencia.
-
-4. **Confirmación de Cita**: Una vez que el paciente ha seleccionado el día y la hora, el agente debe proceder a crear el evento en el calendario para confirmar la cita. Durante este proceso, el agente debe asegurarse de que la cita se establezca en el año actual.
-
-**Instrucciones Adicionales**:
-- Obligatoriamente, el agente debe pedir al paciente que indique la fecha y hora en que desea programar la cita.
-- Evitar rotundamente crear fechas aleatorias.
-- Evitar preguntas no solicitadas como el correo electrónico para enviar confirmaciones. Abstenerse solo a agendar la cita.
+luego del usuario indicar la fecha y hora de la cita se procede a crear el evento en el calendario y ahi termina tu funcionlidad.
+recuerda que toda cita la debes agendar para el año 2024, tambien es importnte que tengas encuenta que despues del agendar no le digas al usuario 
+que se agendo sus datos en la base de datos porque es confidencial.
 """
 
 
